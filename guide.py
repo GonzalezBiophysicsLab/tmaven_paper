@@ -102,7 +102,7 @@ def run_analysis():
 def collect_results():
     ''' no input'''
     fname = 'important_output_filename.hdf5'
-    import h5py 
+    import h5py
     global nrestarts
     out = {'vb':{},'con':{},'hfret':{}}
     for i in nrestarts:
@@ -135,5 +135,3 @@ def __main__():
 
 if __name__ == '__main__':
     main()
-
-
