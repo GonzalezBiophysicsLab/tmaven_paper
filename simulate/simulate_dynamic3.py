@@ -3,7 +3,7 @@ import numba as nb
 import matplotlib.pyplot as plt
 from generate_trace import generate_chain, add_emission
 
-def simulate_dynamic2(rep_number,nrestarts,nmols,nt):
+def simulate_dynamic3(rep_number,nrestarts,nmols,nt):
     mu =  np.array([0.05, 0.75, 0.95, 0.05, 0.95])
     s =  np.array([0.1, 0.1, 0.1, 0.1, 0.1])
     pi = np.array([0.2, 0.15, 0.1, 0.6, 0.3])

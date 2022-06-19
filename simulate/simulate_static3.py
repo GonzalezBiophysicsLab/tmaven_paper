@@ -3,7 +3,7 @@ import numba as nb
 import matplotlib.pyplot as plt
 from generate_trace import generate_chain, add_emission
 
-def simulate_static2(rep_number,nrestarts,nmols,nt):
+def simulate_static3(rep_number,nrestarts,nmols,nt):
     mu1 =  np.array([0.05, 0.75, 0.95])
     s1 =  np.array([0.1, 0.1, 0.1])
     pi1 = np.array([0.6, 0.45, 0.3])
