@@ -66,7 +66,7 @@ def run_vb(rep):
             for sim_ind, sim in zip(range(len(simulations)),simulations):
                 dataset = sim(rep,SNR,trunc)
                 out['%d %d'%(rep,sim_ind)] = analyze_vbFRET_GMM(dataset,2)
-    ...save out to file...
+    #...save out to file...
 
 def run_con(rep):
     global SNRS,truncs,simulations
@@ -77,7 +77,7 @@ def run_con(rep):
             for sim_ind, sim in zip(range(len(simulations)),simulations):
                 dataset = sim(rep,SNR,trunc)
                 out['%d %d'%(rep,sim_ind)] = analyze_consensusHMM(dataset,2)
-    ...save out to file...
+    #...save out to file...
 
 def run_hfret(rep):
     global SNRS,truncs,simulations
@@ -88,7 +88,7 @@ def run_hfret(rep):
             for sim_ind, sim in zip(range(len(simulations)),simulations):
                 dataset = sim(rep,SNR,trunc)
                 out['%d %d'%(rep,sim_ind)] = analyze_hFRET(dataset,2,...)
-    ...save out to file...
+    #...save out to file...
 
 def run_analysis():
     ''' no input '''
@@ -110,21 +110,21 @@ def collect_results():
         out['con']['%d'] = load_restart_datasettype_consensus...
         out['hfret']['%d'] = load_restart_datasettype_hfret...
     with h5py.File(fname,'w') as f:
-        ... save results ....
+        #... save results ....
 
 def make_figures():
     ''' no input'''
 
-    ...load results...
+    #...load results...
 
-    ...do stuff...
+    #...do stuff...
 
-    ...make/save figures...
+    #...make/save figures...
 
 def __main__():
     import argparse
     parser = argparse.ArgumentParser(description="Run the tMAVEN paper calculations")
-	parser.add_argument('step', type=str, choices=['model','collect','figures'],help='which step to run'
+	parser.add_argument('step', type=str, choices=['model','collect','figures'],help='which step to run')
     args.parser.parse_args()
     if args.step == 'model':
         run_analysis()

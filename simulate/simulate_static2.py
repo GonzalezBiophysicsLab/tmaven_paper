@@ -1,7 +1,7 @@
 import numpy as np
 import numba as nb
 import matplotlib.pyplot as plt
-from generate_trace import generate_chain, add_emission
+from .generate_trace import generate_chain, add_emission
 
 def simulate_static2(rep_number,nrestarts,nmols,nt):
     mu =  np.array([0.05, 0.95])
@@ -16,6 +16,7 @@ def simulate_static2(rep_number,nrestarts,nmols,nt):
 
     traces = []
     vits = []
+    chains = []
 
     N1 = nmols//4
     T = nt
@@ -29,6 +30,7 @@ def simulate_static2(rep_number,nrestarts,nmols,nt):
         c =  generate_chain(T,K,pi, transition1, 666 + seed + j)
         i,t = add_emission(c,K,mu,s)
 
+        chains.append(c)
         traces.append(t)
         vits.append(i)
 
@@ -37,23 +39,32 @@ def simulate_static2(rep_number,nrestarts,nmols,nt):
         c =  generate_chain(T,K,pi, transition2, 666 + seed + N1 + jj)
         i,t = add_emission(c,K,mu,s)
 
+        chains.append(c)
         traces.append(t)
         vits.append(i)
 
+    chains = np.array(chains)
     traces = np.array(traces)
     vits = np.array(vits)
 
-    return traces, vits
+    return traces, vits, chains
 
 if __name__ == '__main__':
 
-    traces,vits = simulate_static2(1,1,200,1000)
-    print (traces[-20][0:10])
-    plt.plot(traces[-20])
-    plt.plot(vits[-20], 'k')
+    traces,vits,chains= simulate_static2(1,1,200,1000)
+    print (traces[20][0:10])
+    plt.plot(traces[20])
     plt.show()
 
-    traces = np.array(traces)
+    plt.plot(vits[20], 'k')
+    plt.show()
+
+    print (traces[20][0:10])
+    plt.plot(traces[-20])
+    plt.show()
+
+    plt.plot(vits[-20], 'k')
+    plt.show()
 
     plt.hist(np.concatenate(traces),bins = 100)
     plt.show()
