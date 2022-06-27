@@ -4,13 +4,13 @@ import numba as nb
 
 @nb.njit
 def numba_choice(K, pi):
-    x = np.random.rand()
+	x = np.random.rand()
 
-    y = np.cumsum(pi)/pi.sum()
+	y = np.cumsum(pi)/pi.sum()
 
-    for i in range(len(y)):
-        if x < y[i]:
-            return K[i]
+	for i in range(len(y)):
+		if x < y[i]:
+			return K[i]
 
 @nb.njit(nb.double[:](nb.int64,nb.double[:],nb.double[:],nb.double[:,:], nb.int64))
 def generate_chain(N,K,pi,tm,seed):
