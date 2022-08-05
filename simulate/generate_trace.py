@@ -1,7 +1,7 @@
 import numpy as np
 import numba as nb
 
-@nb.njit
+@nb.njit(cache=True)
 def numba_choice(K, pi):
 	x = np.random.rand()
 
@@ -11,7 +11,7 @@ def numba_choice(K, pi):
 		if x < y[i]:
 			return K[i]
 
-@nb.njit(nb.double[:](nb.int64,nb.double[:],nb.double[:],nb.double[:,:], nb.int64))
+@nb.njit(nb.double[:](nb.int64,nb.double[:],nb.double[:],nb.double[:,:], nb.int64),cache=True)
 def generate_chain(N,K,pi,tm,seed):
 	np.random.seed(seed)
 	chain = np.ones(N)
@@ -24,7 +24,7 @@ def generate_chain(N,K,pi,tm,seed):
 	return chain
 
 
-@nb.njit
+@nb.njit(cache=True)
 def add_emission(chain, K, mu, s):
 	traj = np.ones_like(chain)
 	id = traj.copy()
