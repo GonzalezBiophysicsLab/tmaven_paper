@@ -1,0 +1,6 @@
+*.pyc
+*.nbi
+*.nbc
+__pycache__
+.DS_Store
+*.hdf5
