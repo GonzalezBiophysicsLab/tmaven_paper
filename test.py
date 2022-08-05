@@ -15,8 +15,11 @@ reg_transition = np.array([[0.98, 0.02],
 t, E_y0yt = gen_mc_acf(1,100,reg_transition,reg_mu,reg_s**2,reg_pi)
 plt.plot(t, E_y0yt, 'r')
 
-for i in tqdm(range(10)):
-	traces,vits,chains= simulate_reg(i,1,200,1000)
+Es = []
+residual_Es = []
+
+for i in tqdm(range(5)):
+	traces,vits,chains= simulate_reg(i,1,200,1000,9.)
 
 	'''
 	print("Generated")
@@ -41,9 +44,16 @@ for i in tqdm(range(10)):
 
 
 	t_res,E_y0yt_res = gen_mc_acf(1,100,res.tmstar,res.mean,res.var,res.frac)
+	Es.append(E_y0yt_res)
+	residual_Es.append(E_y0yt - E_y0yt_res)
+
 	plt.plot(t_res, E_y0yt_res, alpha = 0.1)
 
 plt.show()
+
+plt.plot(residual_Es, alpha = 0.1)
+
+
 
 
 #print(res.tmatrix/(res.tmatrix.sum(1)[:,None]))

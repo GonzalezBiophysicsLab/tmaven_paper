@@ -6,18 +6,18 @@ def simulate_static3(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 
 	mu1 =  np.array([0.0, 0.75, 1.])
 	s1 =  np.array([1., 1., 1.])/snr
-	pi1 = np.array([0.6, 0.45, 0.3])
+	pi1 = np.array([0.6, 0.5, 0.4])
 
 	transition1 = np.array([[0.980, 0.010, 0.010],
-							[0.015, 0.970, 0.015],
-							[0.020, 0.020, 0.960]])
+							[0.0125, 0.975, 0.0125],
+							[0.015, 0.015, 0.970]])
 
 	mu2 =  np.array([0.0, 1.])
 	s2 =  np.array([1., 1.])/snr
-	pi2 = np.array([0.6, 0.3])
+	pi2 = np.array([0.6, 0.4])
 
 	transition2 = np.array([[0.98, 0.02],
-							[0.04, 0.96]])
+							[0.03, 0.97]])
 
 	chains = []
 	traces = []

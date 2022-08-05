@@ -6,10 +6,10 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 
 	mu =  np.array([0.0, 1.])
 	s =  np.array([1., 1.])/snr
-	pi = np.array([0.6, 0.3])
+	pi = np.array([0.6, 0.4])
 	transition = np.array([
 		[0.98, 0.02],
-		[0.04, 0.96]])
+		[0.03, 0.97]])
 
 	chains = []
 	traces = []
@@ -19,7 +19,7 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	T = nt
 	K = np.arange(len(mu), dtype = 'float64')
 
-	seed = 666 + nrestarts*dataset_number+rep_number
+	seed = nrestarts*dataset_number+rep_number
 	for j in range(N):
 
 		c =  generate_chain(T,K,pi, transition, seed + j)
