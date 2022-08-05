@@ -34,9 +34,10 @@ def run_consensusHMM(dataset, nstates):
 def idealize_consensusHMM(data,result):
 	from tmaven.controllers.modeler.fxns.hmm import viterbi
 	result.idealized = np.zeros_like(data) + np.nan
+	result.chain = np.zeros_like(data) + np.nan
 	for i in range(data.shape[0]):
 		result.chain[i] = viterbi(data[i],result.mean,result.var,result.tmatrix,result.frac).astype('int')
-		result.idealized[i] = result.mean[result.chain[i]]
+		result.idealized[i] = result.mean[viterbi(data[i],result.mean,result.var,result.tmatrix,result.frac).astype('int')]
 
 	return result
 

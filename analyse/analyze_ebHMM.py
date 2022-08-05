@@ -27,7 +27,8 @@ def run_ebHMM(dataset, nstates):
 	converge = 1e-6
 
 	from tmaven.controllers.modeler.hmm_eb import eb_em_hmm
-	result, vbresults = eb_em_hmm(dataset,nstates,maxiters=maxiters,threshold=converge,nrestarts=nrestarts,priors=priors,init_kmeans=True)
+	result, vbresults = eb_em_hmm(dataset,nstates,maxiters=maxiters,threshold=converge,
+								  nrestarts=nrestarts,priors=priors,init_kmeans=True)
 
 	return result, vbresults
 
@@ -35,7 +36,7 @@ def idealize_ebHMM(data,result,vbresults):
 	from tmaven.controllers.modeler.fxns.hmm import viterbi
 
 	idealized = np.zeros_like(data) + np.nan
-	chain = idealized.copy()
+	chain = np.zeros_like(data, dtype = 'int')
 	vb_means = []
 	vb_vars = []
 	vb_tmatrices = []
@@ -48,14 +49,14 @@ def idealize_ebHMM(data,result,vbresults):
 		vb_vars.append(vb.var)
 		vb_tmatrices.append(vb.tmatrix)
 
-		chain[i] = viterbi(y,vb.mean,vb.var,vb.tmatrix,vb.frac).astype('int')]
+		chain[i] = viterbi(y,vb.mean,vb.var,vb.tmatrix,vb.frac).astype('int')
 		idealized[i] = vb.mean[chain[i]]
 
 
 	result.vb_means = vb_means
 	result.vb_vars = vb_vars
 	result.vb_tmatrices = vb_tmatrices
-	result.chains = chains
+	result.chain = chain
 	result.idealized = idealized
 
 	return result
