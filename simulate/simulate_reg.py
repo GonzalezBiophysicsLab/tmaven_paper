@@ -1,7 +1,5 @@
 import numpy as np
-import numba as nb
-import matplotlib.pyplot as plt
-from generate_trace import generate_chain, add_emission
+from .generate_trace import generate_chain, add_emission
 
 def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	dataset_number = 0
@@ -49,7 +47,7 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	return traces, vits, chains
 
 if __name__ == '__main__':
-
+	import matplotlib.pyplot as plt
 	traces,vits,chains = simulate_reg(1,1,200,1000,5,500.)
 	print (traces[20][0:10])
 	plt.plot(traces[20])
