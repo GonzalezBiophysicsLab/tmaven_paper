@@ -45,13 +45,15 @@ for i in tqdm(range(5)):
 
 	t_res,E_y0yt_res = gen_mc_acf(1,100,res.tmstar,res.mean,res.var,res.frac)
 	Es.append(E_y0yt_res)
-	residual_Es.append(E_y0yt - E_y0yt_res)
+	residual_Es.append((E_y0yt - E_y0yt_res)/E_y0yt_res)
 
 	plt.plot(t_res, E_y0yt_res, alpha = 0.1)
 
 plt.show()
 
-plt.plot(residual_Es, alpha = 0.1)
+for i in range(5):
+	plt.plot(t, residual_Es[i], alpha = 0.1)
+plt.show()
 
 
 
