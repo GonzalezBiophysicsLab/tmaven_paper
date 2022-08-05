@@ -46,7 +46,7 @@ def simulate_dynamic3(rep_number,nrestarts,nmols,nt):
 
 if __name__ == '__main__':
 
-    traces,vits,chains = simulate_dynamic2(1,1,200,1000)
+    traces,vits,chains = simulate_dynamic3(1,1,200,1000)
     print (traces[100][0:10])
     plt.plot(traces[100])
     #plt.plot(vits[20], 'k')

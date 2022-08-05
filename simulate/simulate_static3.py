@@ -54,7 +54,7 @@ def simulate_static3(rep_number,nrestarts,nmols,nt):
 
 if __name__ == '__main__':
 
-    traces,vits = simulate_static2(1,1,200,1000)
+    traces,vits = simulate_static3(1,1,200,1000)
     print (traces[20][0:10])
     plt.plot(traces[20])
     plt.plot(vits[20], 'k')
