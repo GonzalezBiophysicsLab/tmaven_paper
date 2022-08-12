@@ -19,7 +19,8 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	T = nt
 	K = np.arange(len(mu), dtype = 'float64')
 
-	seed = nrestarts*dataset_number+rep_number
+	seed = (nrestarts*nmols)*dataset_number+rep_number*nmols
+
 	for j in range(N):
 
 		c =  generate_chain(T,K,pi, transition, seed + j)

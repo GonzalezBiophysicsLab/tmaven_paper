@@ -1,57 +1,46 @@
 from simulate.simulate_reg import simulate_reg
+from simulate.simulate_static2 import simulate_static2
+from simulate.simulate_static3 import simulate_static3
+from simulate.simulate_dynamic2 import simulate_dynamic2
+from simulate.simulate_dynamic3 import simulate_dynamic3
+
 from analyse.analyze_consensusHMM import analyze_consensusHMM
+from analyse.analyze_ebHMM import analyze_ebHMM
 from analyse.acf import gen_mc_acf
-import matplotlib.pyplot as plt
+
+from plot.acf_plot import plot_acf, plot_acf_residuals
 import numpy as np
 from tqdm import tqdm
 
+snr = 9.
+simulations = [simulate_reg,simulate_static2,simulate_dynamic2,simulate_static3,simulate_dynamic3]
+dataset = ['reg','static2','dynamic2','static3','dynamic3']
 
-reg_mu =  np.array([0.05, 0.95])
-reg_s =  np.array([0.1, 0.1])
-reg_pi = np.array([0.6, 0.4])
-reg_transition = np.array([[0.98, 0.02],
-						   [0.03, 0.97]])
+nrestarts = 100
+prop = np.array([0.25,0.75])
 
-t, E_y0yt = gen_mc_acf(1,100,reg_transition,reg_mu,reg_s**2,reg_pi)
-plt.plot(t, E_y0yt, 'r')
+for i in range(5):
+	sim_dataset = simulations[i]
+	ds = dataset[i]
+	print(ds)
+	Es = []
+	for i in tqdm(range(nrestarts)):
+		traces,vits,chains= sim_dataset(i,nrestarts,200,1000,snr)
 
-Es = []
-residual_Es = []
-
-for i in tqdm(range(5)):
-	traces,vits,chains= simulate_reg(i,1,200,1000,9.)
-
-	'''
-	print("Generated")
-	print (traces[20][0:10])
-	plt.plot(traces[20])
-	plt.show()
-
-	plt.plot(chains[20], 'k')
-	plt.show()
-
-	plt.hist(np.concatenate(traces),bins = 100)
-	plt.show()
-	'''
-
-	res = analyze_consensusHMM(traces, 2)
-	#print(res.mean, res.var, res.frac, res.tmatrix)
-	res.tmstar = res.tmatrix.copy()
-	for i in range(res.tmstar.shape[0]):
-		res.tmstar[i] /= res.tmstar[i].sum()
-		#print(res.tmstar)
-		#print("Analysed")
+		res = analyze_ebHMM(traces, 3)
+		#print(res.mean, res.var, res.frac, res.tmatrix)
+		res.tmstar = res.tmatrix.copy()
+		for i in range(res.tmstar.shape[0]):
+			res.tmstar[i] /= res.tmstar[i].sum()
+			#print(res.tmstar)
+			#print("Analysed")
 
 
-	t_res,E_y0yt_res = gen_mc_acf(1,100,res.tmstar,res.mean,res.var,res.frac)
-	Es.append(E_y0yt_res)
-	residual_Es.append(E_y0yt - E_y0yt_res)
+		t_res,E_y0yt_res = gen_mc_acf(1,100,res.tmstar,res.mean,res.var,res.frac)
+		Es.append(E_y0yt_res)
 
-	plt.plot(t_res, E_y0yt_res, alpha = 0.1)
-
-plt.show()
-
-plt.plot(residual_Es, alpha = 0.1)
+	plot_acf(t_res, Es, ds, 'TM', 'eb', snr, pb='NoPB', prop=prop)
+	plot_acf_residuals(t_res, Es, ds, 'TM', 'eb', snr, pb='NoPB', prop=prop)
 
 
 

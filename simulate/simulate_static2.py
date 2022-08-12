@@ -25,7 +25,7 @@ def simulate_static2(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	T = nt
 	K = np.arange(len(mu), dtype = 'float64')
 
-	seed = 666 + nrestarts*dataset_number+rep_number
+	seed = (nrestarts*nmols)*dataset_number+rep_number*nmols
 	for j in range(N):
 
 		if j < N1:
