@@ -55,14 +55,19 @@ def run_vbHMM_GMM(dataset, nstates):
 	vb_means = []
 	vb_vars = []
 	vb_tmatrices = []
+	vb_frac = []
+	tmatrix = np.zeros((nstates,nstates))
 
 	for i in range(len(dataset)):
 		y = dataset[i]
 		vb = vb_results[i]
 
+
 		vb_means.append(vb.mean)
 		vb_vars.append(vb.var)
 		vb_tmatrices.append(vb.tmatrix)
+		vb_frac.append(vb.frac)
+		tmatrix += vb.tmatrix
 
 		prob = 1./np.sqrt(2.*np.pi*result.var[None,None,:])*np.exp(-.5/result.var[None,None,:]*(idealized[i,:,None]-result.mean[None,None,:])**2.)
 		prob /= prob.sum(2)[:,:,None]
@@ -80,7 +85,7 @@ def run_vbHMM_GMM(dataset, nstates):
 
 	var /= result.r.sum()
 
-	print(viterbi_var,var)
+	#print(viterbi_var,var)
 	result.var = var
 	result.viterbi_var = viterbi_var
 	result.idealized_gmm = idealized_gmm
@@ -88,6 +93,8 @@ def run_vbHMM_GMM(dataset, nstates):
 	result.vb_means = vb_means
 	result.vb_vars = vb_vars
 	result.vb_tmatrices = vb_tmatrices
+	result.vb_frac = vb_frac
+	result.tmatrix = tmatrix
 	result.chain = chain
 
 	return result
