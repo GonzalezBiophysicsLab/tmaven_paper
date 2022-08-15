@@ -29,7 +29,7 @@ def simulate_static3(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	K1 = np.arange(len(mu1), dtype = 'float64')
 	K2 = np.arange(len(mu2), dtype = 'float64')
 
-	seed = 666 + nrestarts*nmols*dataset_number+rep_number*nmols
+	seed = (nrestarts*nmols)*dataset_number+rep_number*nmols
 	for j in range(N):
 
 		if j < N1:
