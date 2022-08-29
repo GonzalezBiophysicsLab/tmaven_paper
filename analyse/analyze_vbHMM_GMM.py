@@ -57,17 +57,12 @@ def run_vbHMM_GMM(dataset, nstates):
 	vb_tmatrices = []
 	vb_frac = []
 	tmatrix = np.zeros((nstates,nstates))
+	varsum = np.zeros(nstates)
+	vardenom = np.zeros(nstates)
 
 	for i in range(len(dataset)):
 		y = dataset[i]
 		vb = vb_results[i]
-
-
-		vb_means.append(vb.mean)
-		vb_vars.append(vb.var)
-		vb_tmatrices.append(vb.tmatrix)
-		vb_frac.append(vb.frac)
-		tmatrix += vb.tmatrix
 
 		prob = 1./np.sqrt(2.*np.pi*result.var[None,None,:])*np.exp(-.5/result.var[None,None,:]*(idealized[i,:,None]-result.mean[None,None,:])**2.)
 		prob /= prob.sum(2)[:,:,None]
@@ -76,17 +71,36 @@ def run_vbHMM_GMM(dataset, nstates):
 		idealized_gmm[i] = result.mean[idealpath]
 		chain[i] = idealpath
 
+		vb_means.append(vb.mean)
+		vb_vars.append(vb.var)
+		vb_tmatrices.append(vb.tmatrix)
+		vb_frac.append(vb.frac)
+		if len(vb.var) == nstates:
+			tmatrix += vb.tmatrix
+			varsum += vb.var
+		else:
+			state_set = set(chain[i])
+
+			for j,k in enumerate(state_set):
+				varsum[k] += vb.var[j]
+				vardenom[k] += 1
+				for m,n in enumerate(state_set):
+					tmatrix[k,n] += vb.tmatrix[j,m]
+
+	var = varsum[np.where(vardenom > 0 )]/vardenom[np.where(vardenom > 0 )]
+	print(var, result.mean)
+
 	viterbi_var = result.var
-	#var = (result.r*((y_flat[:,None] - result.mean[None,:])**2)).sum(0)/(result.r).sum()
-	var = np.zeros_like(result.mean)
 	y_flat = np.concatenate(dataset)
-	for i,state in enumerate(np.argmax(result.r, axis = 1)):
-		var[state] += (y_flat[i] - result.mean[state])**2
+	softmax_var = (result.r*((y_flat[:,None] - result.mean[None,:])**2)).sum(0)/(result.r).sum()
+	#var = np.zeros_like(result.mean)
+	#for i,state in enumerate(np.argmax(result.r, axis = 1)):
+	#	var[state] += (y_flat[i] - result.mean[state])**2
 
-	var /= result.r.sum()
-
+	#var /= result.r.sum()
 	#print(viterbi_var,var)
 	result.var = var
+	result.softmax_var = softmax_var
 	result.viterbi_var = viterbi_var
 	result.idealized_gmm = idealized_gmm
 	result.idealized_hmm = idealized

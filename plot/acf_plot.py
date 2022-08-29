@@ -104,7 +104,7 @@ def return_acf(dataset, t_max, snr, prop=None):
 
 	return t, acf
 
-def plot_acf(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=None):
+def plot_acf(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=None, ylims = None):
 	t_true, true_acf = return_acf(dataset, len(t), snr, prop)
 
 
@@ -114,6 +114,8 @@ def plot_acf(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=None):
 
 
 	plt.plot(t, true_acf, 'r--', lw = 1)
+	if ylims is not None:
+		plt.ylim(ylims)
 
 	figname = dataset + '_' + model + '_' + acf_type + '_' + str(snr) + '_' + pb
 
