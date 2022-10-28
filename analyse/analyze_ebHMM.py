@@ -13,16 +13,7 @@ def run_ebHMM(dataset, nstates):
 	'modeler.ebhmm.prior.pi':1.
 	'''
 
-	mu_prior = np.percentile(np.concatenate(dataset),np.linspace(0,100,nstates+2))[1:-1]
-	beta_prior = np.ones_like(mu_prior)*0.25
-	a_prior = np.ones_like(mu_prior)*2.5
-	b_prior = np.ones_like(mu_prior)*0.01
-	pi_prior = np.ones_like(mu_prior)*1.
-	tm_prior = np.ones((nstates,nstates))*1.
-
-	priors = [mu_prior, beta_prior, a_prior, b_prior, pi_prior, tm_prior]
-
-	maxiters = 40
+	maxiters = 100
 	nrestarts = 10
 	converge = 1e-6
 	new_d = []
@@ -31,6 +22,15 @@ def run_ebHMM(dataset, nstates):
 		xn = np.where(np.isfinite(yi))[0]
 		yi = yi[xn]
 		new_d.append(yi)
+
+	mu_prior = np.percentile(np.concatenate(new_d),np.linspace(0,100,nstates+2))[1:-1]
+	beta_prior = np.ones_like(mu_prior)*0.25
+	a_prior = np.ones_like(mu_prior)*2.5
+	b_prior = np.ones_like(mu_prior)*0.01
+	pi_prior = np.ones_like(mu_prior)*1.
+	tm_prior = np.ones((nstates,nstates))*1.
+
+	priors = [mu_prior, beta_prior, a_prior, b_prior, pi_prior, tm_prior]
 
 	from tmaven.controllers.modeler.hmm_eb import eb_em_hmm
 	result, vbresults = eb_em_hmm(new_d,nstates,maxiters=maxiters,threshold=converge,
