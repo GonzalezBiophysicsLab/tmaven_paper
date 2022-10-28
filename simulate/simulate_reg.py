@@ -29,8 +29,8 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 		if not truncate is None:
 			np.random.seed(seed+j)
 			pbt = int(np.random.exponential(truncate))
-			if pbt < 1:
-				pbt = 1
+			if pbt < 10:
+				pbt = 10
 			if pbt >= c.size:
 				pbt = -1
 			c[pbt:] = np.nan
