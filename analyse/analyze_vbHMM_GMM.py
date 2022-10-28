@@ -21,6 +21,8 @@ def run_vbHMM_GMM(dataset, nstates):
 	vb_results = []
 	for i in range(len(dataset)):
 		yi = dataset[i].astype('double')
+		xn = np.where(np.isfinite(yi))[0]
+		yi = yi[xn]
 		results = []
 		for k in range(1,nstates+1):
 			mu_prior = np.percentile(np.concatenate(dataset),np.linspace(0,100,k+2))[1:-1]
@@ -39,7 +41,7 @@ def run_vbHMM_GMM(dataset, nstates):
 		r = results[modelmax]
 
 		vit = r.mean[viterbi(yi,r.mean,r.var,r.tmatrix,r.frac).astype('int')]
-		idealized[i] = vit
+		idealized[i,xn] = vit
 		vb_results.append(r)
 
 	vits = np.concatenate(idealized)
@@ -75,9 +77,11 @@ def run_vbHMM_GMM(dataset, nstates):
 		vb_vars.append(vb.var)
 		vb_tmatrices.append(vb.tmatrix)
 		vb_frac.append(vb.frac)
+		'''
 		if len(vb.var) == nstates:
 			tmatrix += vb.tmatrix
 			varsum += vb.var
+			vardenom += 1		print(probs)
 		else:
 			state_set = set(chain[i])
 
@@ -86,18 +90,30 @@ def run_vbHMM_GMM(dataset, nstates):
 				vardenom[k] += 1
 				for m,n in enumerate(state_set):
 					tmatrix[k,n] += vb.tmatrix[j,m]
+		'''
+		probs = 1./np.sqrt(2.*np.pi*result.var[None,:])*np.exp(-.5/result.var[None,:]*(vb.mean[:,None]-result.mean[None,:])**2.)
+		probs /= probs.sum(1)
+		state_set = np.sort(np.unique(chain[i]))
+		for j,k in enumerate(state_set):
+			varsum[k] += (vb.var*probs[:,j]).sum()
+			vardenom[k] += probs[:,j].sum()
+			for m,n in enumerate(state_set):
 
-	var = varsum[np.where(vardenom > 0 )]/vardenom[np.where(vardenom > 0 )]
-	print(var, result.mean)
+				tmatrix[k,n] += (vb.tmatrix*(probs[:,j][:,None])*(probs[:,m][None,:])).sum()
+
+	var = varsum/vardenom
+	#print(var, tmatrix)
 
 	viterbi_var = result.var
 	y_flat = np.concatenate(dataset)
-	softmax_var = (result.r*((y_flat[:,None] - result.mean[None,:])**2)).sum(0)/(result.r).sum()
-	#var = np.zeros_like(result.mean)
-	#for i,state in enumerate(np.argmax(result.r, axis = 1)):
-	#	var[state] += (y_flat[i] - result.mean[state])**2
+	y_flat = y_flat[np.isfinite(y_flat)]
+	softmax_var = ((result.r*(y_flat[:,None] - result.mean[None,:])**2)).sum(0)/(result.r).sum(0)
 
-	#var /= result.r.sum()
+	#softmax_var = np.zeros_like(result.mean)
+	#for i,state in enumerate(np.argmax(result.r, axis = 1)):
+		#softmax_var[state] += (y_flat[i] - result.mean[state])**2
+
+	#softmax_var /= result.r.sum()
 	#print(viterbi_var,var)
 	result.var = var
 	result.softmax_var = softmax_var

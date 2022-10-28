@@ -22,12 +22,18 @@ def run_ebHMM(dataset, nstates):
 
 	priors = [mu_prior, beta_prior, a_prior, b_prior, pi_prior, tm_prior]
 
-	maxiters = 20
+	maxiters = 40
 	nrestarts = 10
 	converge = 1e-6
+	new_d = []
+	for i in range(len(dataset)):
+		yi = dataset[i].astype('double')
+		xn = np.where(np.isfinite(yi))[0]
+		yi = yi[xn]
+		new_d.append(yi)
 
 	from tmaven.controllers.modeler.hmm_eb import eb_em_hmm
-	result, vbresults = eb_em_hmm(dataset,nstates,maxiters=maxiters,threshold=converge,
+	result, vbresults = eb_em_hmm(new_d,nstates,maxiters=maxiters,threshold=converge,
 								  nrestarts=nrestarts,priors=priors,init_kmeans=True)
 
 	return result, vbresults

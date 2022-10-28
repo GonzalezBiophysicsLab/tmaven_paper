@@ -26,8 +26,16 @@ def run_consensusHMM(dataset, nstates):
 	nrestarts = 4
 	converge = 1e-10
 
+	new_d = []
+	for i in range(len(dataset)):
+		yi = dataset[i].astype('double')
+		xn = np.where(np.isfinite(yi))[0]
+		yi = yi[xn]
+		new_d.append(yi)
+
 	from tmaven.controllers.modeler.hmm_vb_consensus import consensus_vb_em_hmm
-	result = consensus_vb_em_hmm(dataset,nstates,maxiters=maxiters,threshold=converge,nrestarts=nrestarts,priors=priors,init_kmeans=True)
+	result = consensus_vb_em_hmm(new_d,nstates,maxiters=maxiters,threshold=converge,nrestarts=nrestarts,priors=priors,init_kmeans=True)
+	
 
 	return result
 
