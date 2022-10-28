@@ -4,5 +4,8 @@ __pycache__
 *.pdf
 *.png
 *.hdf5
+*.p
+*ipynb
+*.svg
 results
 figures
