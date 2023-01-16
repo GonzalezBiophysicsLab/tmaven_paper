@@ -58,7 +58,7 @@ def run_vbHMM_GMM(dataset, nstates):
 	vb_vars = []
 	vb_tmatrices = []
 	vb_frac = []
-	tmatrix = np.zeros((nstates,nstates))
+	tmatrix = np.ones((nstates,nstates))
 	varsum = np.zeros(nstates)
 	vardenom = np.zeros(nstates)
 
@@ -92,7 +92,8 @@ def run_vbHMM_GMM(dataset, nstates):
 					tmatrix[k,n] += vb.tmatrix[j,m]
 		'''
 		probs = 1./np.sqrt(2.*np.pi*result.var[None,:])*np.exp(-.5/result.var[None,:]*(vb.mean[:,None]-result.mean[None,:])**2.)
-		probs /= probs.sum(1)
+		probs /= probs.sum(1)[:,None]
+		#print(probs)
 		state_set = np.sort(np.unique(chain[i]))
 		for j,k in enumerate(state_set):
 			varsum[k] += (vb.var*probs[:,j]).sum()
