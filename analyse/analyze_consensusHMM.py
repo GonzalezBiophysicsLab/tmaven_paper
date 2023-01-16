@@ -13,7 +13,14 @@ def run_consensusHMM(dataset, nstates):
 	'modeler.vbconhmm.prior.pi':1.,
 	'''
 
-	mu_prior = np.percentile(np.concatenate(dataset),np.linspace(0,100,nstates+2))[1:-1]
+	new_d = []
+	for i in range(len(dataset)):
+		yi = dataset[i].astype('double')
+		xn = np.where(np.isfinite(yi))[0]
+		yi = yi[xn]
+		new_d.append(yi)
+
+	mu_prior = np.percentile(np.concatenate(new_d),np.linspace(0,100,nstates+2))[1:-1]
 	beta_prior = np.ones_like(mu_prior)*0.25
 	a_prior = np.ones_like(mu_prior)*2.5
 	b_prior = np.ones_like(mu_prior)*0.01
@@ -35,7 +42,6 @@ def run_consensusHMM(dataset, nstates):
 
 	from tmaven.controllers.modeler.hmm_vb_consensus import consensus_vb_em_hmm
 	result = consensus_vb_em_hmm(new_d,nstates,maxiters=maxiters,threshold=converge,nrestarts=nrestarts,priors=priors,init_kmeans=True)
-	
 
 	return result
 
