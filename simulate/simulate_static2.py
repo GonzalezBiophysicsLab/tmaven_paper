@@ -1,7 +1,7 @@
 import numpy as np
 from .generate_trace import generate_chain, add_emission
 
-def simulate_static2(rep_number,nrestarts,nmols,nt,snr,truncate=None):
+def simulate_static2(rep_number,nrestarts,nmols,nt,snr,truncate=None, prop=0.25):
 	dataset_number = 1
 
 	mu =  np.array([0.0, 1.])
@@ -21,7 +21,7 @@ def simulate_static2(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	vits = []
 
 	N = nmols
-	N1 = nmols//4
+	N1 = int(nmols*prop)
 	T = nt
 	K = np.arange(len(mu), dtype = 'float64')
 

@@ -11,6 +11,10 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 		[0.98, 0.02],
 		[0.03, 0.97]])
 
+	transition_f = np.array([
+		[0.94, 0.06],
+		[0.09, 0.91]])
+
 	chains = []
 	traces = []
 	vits = []

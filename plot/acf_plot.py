@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from analyse.acf import gen_mc_acf
 
-def return_params(dataset, snr):
+def return_params(dataset, snr,tsh=4):
 	if dataset == 'reg':
 		mu =  np.array([0.0, 1.])
 		s =  np.array([1., 1.])/snr
@@ -21,10 +21,10 @@ def return_params(dataset, snr):
 		pi /= pi.sum()
 
 		transition = np.array([
-			[0.94, 0.06, 0.002, 0.002],
-			[0.09, 0.91, 0.002, 0.002],
-			[0.002/3, 0.002/3, 0.98, 0.02],
-			[0.002/3, 0.002/3, 0.03, 0.97]])
+			[0.94, 0.06, 0.0005*tsh, 0.0005*tsh],
+			[0.09, 0.91, 0.0005*tsh, 0.0005*tsh],
+			[0.0005*tsh/3, 0.0005*tsh/3, 0.98, 0.02],
+			[0.0005*tsh/3, 0.0005*tsh/3, 0.03, 0.97]])
 
 		for i in range(transition.shape[0]):
 			transition[i] /= transition[i].sum()
@@ -84,7 +84,7 @@ def return_params(dataset, snr):
 		return mu1, s1, pi1, transition1, mu2, s2, pi2, transition2
 
 
-def return_acf(dataset, t_max, snr, prop=None):
+def return_acf(dataset, t_max, snr, prop=None, tsh=4):
 	if dataset in ['static2', 'static3']:
 		if dataset == 'static2':
 			mu, s, pi, transition1, transition2 = return_params(dataset,snr)
@@ -98,7 +98,7 @@ def return_acf(dataset, t_max, snr, prop=None):
 		acf = (prop[0]*acf1 + prop[1]*acf2)/prop.sum()
 
 	else:
-		mu, s, pi, transition = return_params(dataset,snr)
+		mu, s, pi, transition = return_params(dataset,snr,tsh)
 
 		t, acf = gen_mc_acf(1, t_max, transition, mu, s**2, pi )
 
@@ -119,10 +119,11 @@ def plot_acf(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=None, ylims
 
 	figname = dataset + '_' + model + '_' + acf_type + '_' + str(snr) + '_' + pb
 
-	fig.savefig('./figures/acf_{}.pdf'.format(figname))
-	fig.savefig('./figures/acf_{}.png'.format(figname),dpi=300)
+	plt.show()
+	#fig.savefig('./figures/acf_{}.pdf'.format(figname))
+	#fig.savefig('./figures/acf_{}.png'.format(figname),dpi=300)
 
-def plot_acf_residuals(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=None):
+def plot_acf_residuals(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=None,xlims = None, ylims = None):
 	t_true, true_acf = return_acf(dataset, len(t), snr, prop)
 
 	residual_Es = true_acf - np.array(acfs)
@@ -138,7 +139,13 @@ def plot_acf_residuals(t, acfs, dataset, acf_type, model, snr, pb='NoPB', prop=N
 	plt.plot(t, mean_Es, 'k')
 	plt.fill_between(t, percentile_975, percentile_025, color = "#1F77B419", edgecolor='#165582ff', ls = '--')
 
+	if xlims is not None:
+		plt.xlim(xlims)
+	if ylims is not None:
+		plt.ylim(ylims)
+
 	figname = dataset + '_' + model + '_' + acf_type + '_' + str(snr) + '_' + pb
 
-	fig.savefig('./figures/acf_residuals_{}.pdf'.format(figname))
-	fig.savefig('./figures/acf_residuals_{}.png'.format(figname),dpi=300)
+	plt.show()
+	#fig.savefig('./figures/acf_residuals_{}.pdf'.format(figname))
+	#fig.savefig('./figures/acf_residuals_{}.png'.format(figname),dpi=300)

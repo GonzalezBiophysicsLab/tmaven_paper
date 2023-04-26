@@ -1,18 +1,31 @@
 import numpy as np
 from .generate_trace import generate_chain, add_emission
 
-def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None):
+def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
 	dataset_number = 3
 
 	mu =  np.array([0.0, 1., 0., 1.])
 	s =  np.array([1., 1., 1., 1.])/snr
-	pi = np.array([0.2, 0.4/3, 0.6, 0.4])
+	pi = np.array([0.6/1., 0.4/1., 0.6/3., 0.4/3.])
+
+	#default is 0.002 and 0.002/3
+	t1 = np.array([            #slow 0-1
+		[0.98, 0.02],
+		[0.03, 0.97]])
+
+	t2 = np.array([            #fast 0-1
+		[0.94, 0.06],
+		[0.09, 0.91]])
+
+	t3 = np.array([            #slow-fast
+		[1-0.0005*tsh/3., 0.0005*tsh/3.],
+		[0.0005*tsh, 1-0.0005*tsh]])
 
 	transition = np.array([
-		[0.94, 0.06, 0.002, 0.002],
-		[0.09, 0.91, 0.002, 0.002],
-		[0.002/3, 0.002/3, 0.98, 0.02],
-		[0.002/3, 0.002/3, 0.03, 0.97]])
+		[t1[0][0]*t3[0][0], t1[0][1]*t3[0][0], t2[0][0]*t3[0][1], t2[0][1]*t3[0][1]],
+		[t1[1][0]*t3[0][0], t1[1][1]*t3[0][0], t2[1][0]*t3[0][1], t2[1][1]*t3[0][1]],
+		[t1[0][0]*t3[1][0], t1[0][1]*t3[1][0], t2[0][0]*t3[1][1], t2[0][1]*t3[1][1]],
+		[t1[1][0]*t3[1][0], t1[1][1]*t3[1][0], t2[1][0]*t3[1][1], t2[1][1]*t3[1][1]]]) #replaced 3 with 1
 
 
 	traces = []
