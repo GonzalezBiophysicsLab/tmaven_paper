@@ -6,7 +6,7 @@ def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
 
 	mu =  np.array([0.0, 1., 0., 1.])
 	s =  np.array([1., 1., 1., 1.])/snr
-	pi = np.array([0.6/1., 0.4/1., 0.6/3., 0.4/3.])
+	pi = np.array([0.6/1., 0.4/1., 0.6/1., 0.4/1.])
 
 	#default is 0.002 and 0.002/3
 	t1 = np.array([            #slow 0-1
@@ -18,8 +18,8 @@ def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
 		[0.09, 0.91]])
 
 	t3 = np.array([            #slow-fast
-		[1-0.0005*tsh/3., 0.0005*tsh/3.],
-		[0.0005*tsh, 1-0.0005*tsh]])
+		[1-0.0005*tsh/1., 0.0005*tsh/1.],
+		[0.0005*tsh/1., 1-0.0005*tsh/1.]])
 
 	transition = np.array([
 		[t1[0][0]*t3[0][0], t1[0][1]*t3[0][0], t2[0][0]*t3[0][1], t2[0][1]*t3[0][1]],

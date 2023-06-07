@@ -673,7 +673,7 @@ def run_hHMM(dataset, depth_vec, prod_states):
 						  nstates = 4,mean=mu,var=var,frac=pi,
 						  tmatrix=flat_tm,
 						  likelihood=likelihood,
-						  a=post_a,b=post_b,beta=post_beta, h_pi=post_pi, h_tm=post_tm)
+						  a=post_a,b=post_b,beta=post_beta, h_pi=post_pi, h_tm=post_tm, h_exit=post_exit)
 
     return result
 

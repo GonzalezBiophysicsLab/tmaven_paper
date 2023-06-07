@@ -34,7 +34,7 @@ for snr in [9.0]:#, 3.0, 6.0]:
 		tau = 1000
 		N = 200
 		truncate = None
-		#prop = (j+1)*0.05
+		#prop = 0.05
 		tsh = 20
 		sim_dataset = simulations[2]
 		ds = dataset[2]
@@ -46,7 +46,7 @@ for snr in [9.0]:#, 3.0, 6.0]:
 		ress = []
 		Es = []
 		for i in tqdm(range(nrestarts)):
-			traces,vits,chains= sim_dataset(i,nrestarts,N,tau,snr,truncate=truncate,tsh =tsh)
+			traces,vits,chains= sim_dataset(i,nrestarts,N,tau,snr,truncate=truncate,tsh=tsh)
 
 			res = analyse(traces)
 			#print(res.mean, res.var, res.frac, res.tmatrix)
@@ -60,9 +60,9 @@ for snr in [9.0]:#, 3.0, 6.0]:
 			ress.append(res)
 		Edict[tsh] = Es
 		resdict[tsh] = ress
-		ds = ds + 'p25'+ 'tsh' + str(tsh)
-		pickle.dump(Es, open( "ACFs_new3_{}_{}_{}_{}_NoPB_changerate.p".format(nstates,ds,snr,model_used), "wb" ))
-		pickle.dump(ress, open( "Results_new3_{}_{}_{}_{}_NoPB_changerate.p".format(nstates,ds,snr,model_used), "wb" ) )
+		ds = ds + 'p50tsh' + str(tsh)
+		pickle.dump(Es, open( "ACFs_new3_{}_{}_{}_{}_NoPB.p".format(nstates,ds,snr,model_used), "wb" ))
+		pickle.dump(ress, open( "Results_new3_{}_{}_{}_{}_NoPB.p".format(nstates,ds,snr,model_used), "wb" ) )
 
 	#pickle.dump(Edict, open( "ACFdicts_{}_{}_{}_{}_NoPB_changerate.p".format(nstates,ds,snr,model_used), "wb" ))
 	#pickle.dump(resdict, open( "Resultdicts_{}_{}_{}_{}_NoPB_changerate.p".format(nstates,ds,snr,model_used), "wb" ) )
