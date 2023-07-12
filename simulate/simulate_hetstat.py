@@ -1,7 +1,7 @@
 import numpy as np
 from .generate_trace import generate_chain, add_emission
 
-def simulate_static2(rep_number,nrestarts,nmols,nt,snr,truncate=None, prop=0.25):
+def simulate_hetstat(rep_number,nrestarts,nmols,nt,snr, prop=0.25, **extra):
 	dataset_number = 1
 
 	mu =  np.array([0.0, 1.])
@@ -33,17 +33,6 @@ def simulate_static2(rep_number,nrestarts,nmols,nt,snr,truncate=None, prop=0.25)
 		else:
 			c =  generate_chain(T,K,pi, transition2, seed + j)
 		i,t = add_emission(c,K,mu,s)
-
-		if not truncate is None:
-			np.random.seed(seed+j)
-			pbt = int(np.random.exponential(truncate))
-			if pbt < 1:
-				pbt = 1
-			if pbt >= c.size:
-				pbt = -1
-			c[pbt:] = np.nan
-			i[pbt:] = np.nan
-			t[pbt:] = np.nan
 
 		chains.append(c)
 		traces.append(t)

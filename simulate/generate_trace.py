@@ -33,19 +33,6 @@ def add_emission(chain, K, mu, s):
 		traj[i] = id[i] + np.random.normal(loc = 0, scale = s[int(chain[i])])
 	return id,traj
 
-def generate_dwells(trace, dwell_list, means):
-	trace = trace[~np.isnan(trace)]
-	#print(trace)
-	if len(trace) > 0: #proetcting if all is NaN
-		dwell_split = np.split(trace, np.argwhere(np.diff(trace)!=0).flatten()+1)
-
-		if len(dwell_split) > 2: #protecting against no or single transition in a trace
-			dwell_split = dwell_split[1:-1] #skipping first and last dwells
-			for d in dwell_split:
-				ind = int(np.argwhere(d[0] == means))
-				dwell_list[str(ind)].append(len(d))
-
-	return dwell_list
 
 if __name__ == '__main__':
 	import matplotlib.pyplot as plt
@@ -66,6 +53,3 @@ if __name__ == '__main__':
 	plt.plot(c, 'k')
 	plt.show()
 
-	d = {str(i):[] for i in range(len(mu))}
-	d = generate_dwells(i,d,mu)
-	print(d)

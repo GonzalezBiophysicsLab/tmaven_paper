@@ -1,11 +1,9 @@
-import tmaven
 import numpy as np
-from simulate.simulate_reg import simulate_reg
-from simulate.simulate_static2 import simulate_static2
-from simulate.simulate_static3 import simulate_static3
-from simulate.simulate_dynamic2 import simulate_dynamic2
-from simulate.simulate_dynamic3 import simulate_dynamic3
-simulations = [simulate_reg,simulate_static2,simulate_dynamic2,simulate_static3,simulate_dynamic3]
+from simulate.simulate_hom import simulate_reg
+from simulate.simulate_hetstat import simulate_static2
+from simulate.simulate_hetdyn import simulate_dynamic2
+
+simulations = [simulate_reg,simulate_static2,simulate_dynamic2]
 
 #### actual calls to tMAVEN functions go here
 def analyze_vbFRET_GMM(dataset,nstates):

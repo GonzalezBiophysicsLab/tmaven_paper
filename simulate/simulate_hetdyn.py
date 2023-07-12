@@ -1,14 +1,16 @@
 import numpy as np
 from .generate_trace import generate_chain, add_emission
 
-def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
+def simulate_hetdyn(rep_number,nrestarts,nmols,nt,snr,tsh = 4,prop=0.5):
 	dataset_number = 3
 
 	mu =  np.array([0.0, 1., 0., 1.])
 	s =  np.array([1., 1., 1., 1.])/snr
+	Keq = prop/(1-prop)
 	pi = np.array([0.6/1., 0.4/1., 0.6/1., 0.4/1.])
 
-	#default is 0.002 and 0.002/3
+
+
 	t1 = np.array([            #slow 0-1
 		[0.98, 0.02],
 		[0.03, 0.97]])
@@ -25,7 +27,7 @@ def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
 		[t1[0][0]*t3[0][0], t1[0][1]*t3[0][0], t2[0][0]*t3[0][1], t2[0][1]*t3[0][1]],
 		[t1[1][0]*t3[0][0], t1[1][1]*t3[0][0], t2[1][0]*t3[0][1], t2[1][1]*t3[0][1]],
 		[t1[0][0]*t3[1][0], t1[0][1]*t3[1][0], t2[0][0]*t3[1][1], t2[0][1]*t3[1][1]],
-		[t1[1][0]*t3[1][0], t1[1][1]*t3[1][0], t2[1][0]*t3[1][1], t2[1][1]*t3[1][1]]]) #replaced 3 with 1
+		[t1[1][0]*t3[1][0], t1[1][1]*t3[1][0], t2[1][0]*t3[1][1], t2[1][1]*t3[1][1]]]) 
 
 
 	traces = []
@@ -42,16 +44,6 @@ def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
 		c =  generate_chain(T,K,pi, transition, seed + j)
 		i,t = add_emission(c,K,mu,s)
 
-		if not truncate is None:
-			np.random.seed(seed+j)
-			pbt = int(np.random.exponential(truncate))
-			if pbt < 1:
-				pbt = 1
-			if pbt >= c.size:
-				pbt = -1
-			c[pbt:] = np.nan
-			i[pbt:] = np.nan
-			t[pbt:] = np.nan
 
 		chains.append(c)
 		traces.append(t)
@@ -66,7 +58,7 @@ def simulate_dynamic2(rep_number,nrestarts,nmols,nt,snr,truncate=None,tsh = 4):
 
 if __name__ == '__main__':
 	import matplotlib.pyplot as plt
-	traces,vits,chains = simulate_dynamic2(0,1,200,1000,5.,500.)
+	traces,vits,chains = simulate_hetdyn(0,1,200,1000,5.,500.)
 	print (traces[100][0:10])
 	plt.plot(traces[100])
 	#plt.plot(vits[20], 'k')

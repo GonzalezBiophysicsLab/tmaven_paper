@@ -1,7 +1,7 @@
 import numpy as np
 from .generate_trace import generate_chain, add_emission
 
-def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
+def simulate_hom(rep_number,nrestarts,nmols,nt,snr,**extra):
 	dataset_number = 0
 
 	mu =  np.array([0.0, 1.])
@@ -10,10 +10,6 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 	transition = np.array([
 		[0.98, 0.02],
 		[0.03, 0.97]])
-
-	transition_f = np.array([
-		[0.94, 0.06],
-		[0.09, 0.91]])
 
 	chains = []
 	traces = []
@@ -30,17 +26,6 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 		c =  generate_chain(T,K,pi, transition, seed + j)
 		i,t = add_emission(c,K,mu,s)
 
-		if not truncate is None:
-			np.random.seed(seed+j)
-			pbt = int(np.random.exponential(truncate))
-			if pbt < 10:
-				pbt = 10
-			if pbt >= c.size:
-				pbt = -1
-			c[pbt:] = np.nan
-			i[pbt:] = np.nan
-			t[pbt:] = np.nan
-
 		chains.append(c)
 		traces.append(t)
 		vits.append(i)
@@ -53,7 +38,7 @@ def simulate_reg(rep_number,nrestarts,nmols,nt,snr,truncate=None):
 
 if __name__ == '__main__':
 	import matplotlib.pyplot as plt
-	traces,vits,chains = simulate_reg(1,1,200,1000,5,500.)
+	traces,vits,chains = simulate_hom(1,1,200,1000,5,500.)
 	print (traces[20][0:10])
 	plt.plot(traces[20])
 	plt.plot(vits[20], 'k')
