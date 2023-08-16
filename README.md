@@ -17,14 +17,21 @@ git clone https://github.com/GonzalezBiophysicsLab/tmaven_paper.git
 
 ```bash
 cd tmaven_paper
-python run_paper.py paper_mode_here
+python run_paper.py <dataset> <change> <model>
 ```
 
-where `paper_mode_here` is either `dataset` `change` or `model`. Use the help for more information on arguments required for each mode.
+where
+- `dataset` is `hom` (Homogenous), `hetstat` (Static), or `hetdyn` (Dynamic),
+- `change` is `fixed` (for Homogenous), `changeN` (for Homogenous), `changeT` (for Homogenous), `changeprop` (for Static), or `changerate` (for Dynamic),
+- `model` is `composite`, `global`, or `hhmm`.
 
+If you put an invalid combination of dataset and change, the code will output Invalid combination.
+
+Use the help for more information on arguments required for each mode.
 ```bash
 python run_paper.py --help
 ```
 
 ## License
 [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)
+ 
