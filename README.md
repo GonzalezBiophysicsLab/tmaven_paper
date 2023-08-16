@@ -27,6 +27,8 @@ where
 
 If you put an invalid combination of dataset and change, the code will output Invalid combination.
 
+To run a 4-state model (only for composite and global), change `nstates = 2` in line 24 of `run_paper.py` to `nstates = 4`.
+
 Use the help for more information on arguments required for each mode.
 ```bash
 python run_paper.py --help
