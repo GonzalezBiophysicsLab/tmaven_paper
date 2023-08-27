@@ -10,6 +10,7 @@ from analyse.acf import gen_mc_acf
 from plot.acf_plot import plot_acf, plot_acf_residuals
 from tqdm import tqdm
 import pickle
+import os
 
 
 def main():
@@ -49,7 +50,7 @@ def main():
 		Ns = [100,200,500]
 	elif dataset == 'hetstat' and change == 'changeprop':
 			sim_range = 20
-	elif dataset == 'hetstat' and change == 'changerate':
+	elif dataset == 'hetdyn' and change == 'changerate':
 			sim_range = 20
 	else:
 		print("Invalid combination!!")
@@ -101,8 +102,11 @@ def main():
 		Edict[index] = Es
 		resdict[index] = ress
 
-	pickle.dump(Edict, open( "ACFdicts_{}_{}_{}_{}_{}.p".format(nstates,dataset,snr,model,change), "wb" ))
-	pickle.dump(resdict, open( "Resultdicts_{}_{}_{}_{}_{}.p".format(nstates,dataset,snr,model,change), "wb" ) )
+	if not os.path.exists('figures/results'):
+		os.makedirs('figures/results')
+
+	pickle.dump(Edict, open( "figures/results/ACFdicts_{}_{}_{}_{}_{}.p".format(nstates,dataset,snr,model,change), "wb" ))
+	pickle.dump(resdict, open( "figures/results/Resultdicts_{}_{}_{}_{}_{}.p".format(nstates,dataset,snr,model,change), "wb" ) )
 
 if __name__=='__main__':
 	main()
