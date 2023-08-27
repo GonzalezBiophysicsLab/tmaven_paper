@@ -33,6 +33,12 @@ Use the help for more information on arguments required for each mode.
 ```bash
 python run_paper.py --help
 ```
+To use the figure making notebooks, please run the following to add necessary libraries:
+```bash
+pip install tqdm
+python -m pip install seaborn==0.12.1
+```
+
 
 ## License
 [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)
