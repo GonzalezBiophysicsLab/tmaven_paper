@@ -2,9 +2,9 @@
 
 This repository holds the code for running the investigations presented in the paper:
 
-Verma, A.R., Ray, K., Bodick, M., Kinz-Thompson, C.D., Gonzalez, Jr., R.L. (2023) Accurately Capturing Heterogeneity in Single-molecule Experiments with tMAVEN. In preparation.
+[Verma, A.R., Ray, K., Bodick, M., Kinz-Thompson, C.D., Gonzalez, Jr., R.L. (2024) Increasing the accuracy of single-molecule data analysis using tMAVEN. Biophysical Journal.](https://www.sciencedirect.com/science/article/pii/S0006349524000389)
 
-This research uses the [tMAVEN program](https://github.com/GonzalezBiophysicsLab/tmaven). The `tMAVEN` software is separate from the investigations presented in this work, however you will need the software in order to run these. Make sure that you install `tMAVEN` so that it is in your Python PATH variable (_i.e._, this probably means installing it through [script-based approach](https://gonzalezbiophysicslab.github.io/tmaven/install.html) instead of using a binary installer).
+This research uses the [tMAVEN program](https://github.com/GonzalezBiophysicsLab/tmaven). The `tMAVEN` software is separate from the investigations presented in this work, however you will need the software in order to run these. Make sure that you install `tMAVEN` so that it is in your Python PATH variable (_i.e._, installing it through [script-based approach](https://gonzalezbiophysicslab.github.io/tmaven/install.html) instead of using a binary installer).
 
 
 ## Installation
